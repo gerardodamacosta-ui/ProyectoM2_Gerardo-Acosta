@@ -1,6 +1,6 @@
 import request from "supertest";
 import { describe, it, expect } from "vitest";
-import app from "../src/app.js";
+import app from "../../src/app.js";
 
 describe("Authors", () => {
   let authorId;
