@@ -14,3 +14,5 @@ CREATE TABLE IF NOT EXISTS posts (
   published BOOLEAN DEFAULT false,
   created_at TIMESTAMP DEFAULT NOW()
 );
+
+CREATE INDEX IF NOT EXISTS idx_posts_author_id ON posts(author_id);
