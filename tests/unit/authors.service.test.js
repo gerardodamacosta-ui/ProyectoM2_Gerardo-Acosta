@@ -1,21 +1,19 @@
+import { createRequire } from "node:module";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
-vi.mock("../../src/db/pool.js", () => ({
-  default: { query: vi.fn() },
-}));
-
-import pool from "../../src/db/pool.js";
-import {
+const require = createRequire(import.meta.url);
+const pool = require("../../src/db/pool.js");
+const {
   getAllAuthors,
   getAuthorById,
   createAuthor,
   updateAuthor,
   deleteAuthor,
-} from "../../src/services/authors.service.js";
+} = require("../../src/services/authors.service.js");
 
 describe("Authors Service (unit)", () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    pool.query = vi.fn();
   });
 
   it("getAllAuthors - retorna lista de autores", async () => {
