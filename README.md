@@ -41,6 +41,7 @@ miniblog-api/
 ├── src/
 │   ├── app.js
 │   ├── db/
+│   │   ├── initDb.js
 │   │   └── pool.js
 │   ├── middlewares/
 │   │   ├── errorHandler.js
@@ -94,7 +95,7 @@ DATABASE_URL=postgresql://postgres:TU_CONTRASEÑA@127.0.0.1:5432/miniblog
 
 La aplicación toma la cadena de conexión desde `DATABASE_URL` en `src/db/pool.js`.
 
-### 4. Crear la base de datos y las tablas
+### 4. Crear la base de datos
 
 Conectate a PostgreSQL y ejecutá:
 
@@ -107,9 +108,9 @@ Luego dentro de psql:
 ```sql
 CREATE DATABASE miniblog;
 \c miniblog postgres 127.0.0.1
-\i sql/setup.sql
-\i sql/seed.sql
 ```
+
+Nota: al iniciar la API, se ejecutan automáticamente `sql/setup.sql` y `sql/seed.sql` desde `src/db/initDb.js`.
 
 ### 5. Iniciar el servidor
 
@@ -239,6 +240,7 @@ En Railway, en la sección **Variables** del servicio web (la API), configurá:
 
 ```env
 DATABASE_URL=postgresql://usuario:contraseña@host:puerto/miniblog
+NODE_ENV=production
 PORT=3000
 ```
 
@@ -246,12 +248,14 @@ En este proyecto, la app consume `process.env.DATABASE_URL`, así que ese valor 
 
 Si Railway te ofrece ambas opciones, preferí `Postgres.DATABASE_URL` (conexión interna). Usá `Postgres.DATABASE_PUBLIC_URL` solo si necesitás conexión pública por un motivo específico.
 
-### 6. Ejecutar los scripts SQL
+### 6. Inicialización automática de BD
 
-Desde la consola de PostgreSQL en Railway (o con un cliente externo), ejecutá:
+En este proyecto, al arrancar el servicio se ejecutan automáticamente:
 
-- `sql/setup.sql` para crear tablas e índice.
-- `sql/seed.sql` (opcional) para cargar datos de prueba.
+- `sql/setup.sql` para crear tablas e índice si no existen.
+- `sql/seed.sql` para cargar datos iniciales sin duplicar autores por email.
+
+No necesitás correr estos scripts manualmente en Railway salvo casos de mantenimiento.
 
 ### 7. Verificar despliegue
 
