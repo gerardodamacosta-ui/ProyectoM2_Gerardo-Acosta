@@ -7,7 +7,12 @@ const {
   updateAuthor,
   deleteAuthor,
 } = require("../services/authors.service");
-const { badRequest, notFound } = require("../middlewares/errors");
+const { badRequest, notFound, conflict } = require("../middlewares/errors");
+
+const isInvalidId = (id) => {
+  const parsedId = Number(id);
+  return !Number.isInteger(parsedId) || parsedId <= 0;
+};
 
 router.get("/", async (req, res, next) => {
   try {
@@ -20,6 +25,8 @@ router.get("/", async (req, res, next) => {
 
 router.get("/:id", async (req, res, next) => {
   try {
+    if (isInvalidId(req.params.id))
+      return next(badRequest("id debe ser un numero entero positivo"));
     const author = await getAuthorById(req.params.id);
     if (!author) return next(notFound("Autor no encontrado"));
     res.json(author);
@@ -37,13 +44,15 @@ router.post("/", async (req, res, next) => {
     res.status(201).json(author);
   } catch (err) {
     if (err.code === "23505")
-      return next(badRequest("El email ya está registrado"));
+      return next(conflict("El email ya esta registrado"));
     next(err);
   }
 });
 
 router.put("/:id", async (req, res, next) => {
   try {
+    if (isInvalidId(req.params.id))
+      return next(badRequest("id debe ser un numero entero positivo"));
     const { name, email, bio } = req.body;
     if (!name || !email)
       return next(badRequest("name y email son obligatorios"));
@@ -52,13 +61,15 @@ router.put("/:id", async (req, res, next) => {
     res.json(author);
   } catch (err) {
     if (err.code === "23505")
-      return next(badRequest("El email ya está registrado"));
+      return next(conflict("El email ya esta registrado"));
     next(err);
   }
 });
 
 router.delete("/:id", async (req, res, next) => {
   try {
+    if (isInvalidId(req.params.id))
+      return next(badRequest("id debe ser un numero entero positivo"));
     const author = await deleteAuthor(req.params.id);
     if (!author) return next(notFound("Autor no encontrado"));
     res.status(204).send();
