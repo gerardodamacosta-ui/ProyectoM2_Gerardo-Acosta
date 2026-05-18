@@ -1,10 +1,17 @@
 INSERT INTO authors (name, email, bio) VALUES
-('Gerardo Acosta', 'gerardo@example.com', 'Desarrollador backend en formación'),
-('Lucía Fernández', 'lucia@example.com', 'Entusiasta de las bases de datos'),
-('Tomás Rivero', 'tomas@example.com', 'Fan de Node.js y el café');
+('Gerardo Acosta', 'gerardo@example.com', 'Desarrollador backend en formacion'),
+('Lucia Fernandez', 'lucia@example.com', 'Entusiasta de las bases de datos'),
+('Tomas Rivero', 'tomas@example.com', 'Fan de Node.js y el cafe')
+ON CONFLICT (email) DO NOTHING;
 
-INSERT INTO posts (author_id, title, content, published) VALUES
-(1, 'Mi aventura con Express', 'Aprender Express fue más fácil de lo que pensaba', true),
-(1, 'Por qué me gusta PostgreSQL', 'Las bases de datos relacionales tienen mucho sentido', false),
-(2, 'Consultas SQL desde cero', 'Empecé sin saber nada y acá estoy', true),
-(3, 'Node.js en la práctica', 'Construir una API REST te enseña un montón', true);
+INSERT INTO posts (author_id, title, content, published)
+SELECT a.id, p.title, p.content, p.published
+FROM (
+	VALUES
+		('gerardo@example.com', 'Mi aventura con Express', 'Aprender Express fue mas facil de lo que pensaba', true),
+		('gerardo@example.com', 'Por que me gusta PostgreSQL', 'Las bases de datos relacionales tienen mucho sentido', false),
+		('lucia@example.com', 'Consultas SQL desde cero', 'Empece sin saber nada y aca estoy', true),
+		('tomas@example.com', 'Node.js en la practica', 'Construir una API REST te ensena un monton', true)
+) AS p(email, title, content, published)
+JOIN authors a ON a.email = p.email
+WHERE NOT EXISTS (SELECT 1 FROM posts);
