@@ -92,6 +92,8 @@ PORT=3000
 DATABASE_URL=postgresql://postgres:TU_CONTRASEÑA@127.0.0.1:5432/miniblog
 ```
 
+La aplicación toma la cadena de conexión desde `DATABASE_URL` en `src/db/pool.js`.
+
 ### 4. Crear la base de datos y las tablas
 
 Conectate a PostgreSQL y ejecutá:
@@ -111,6 +113,8 @@ CREATE DATABASE miniblog;
 
 ### 5. Iniciar el servidor
 
+En la consola, ejecutá `npm run dev` o `npm start` para iniciar el servidor.
+
 ```bash
 npm run dev
 ```
@@ -120,6 +124,8 @@ El servidor estará corriendo en `http://localhost:3000`
 ---
 
 ## Cómo ejecutar los tests
+
+En la consola, ejecutá `npm test`
 
 ```bash
 npm test
@@ -131,14 +137,14 @@ npm test
 
 El archivo `openapi.yaml` en la raíz del proyecto contiene la especificación completa de la API en formato OpenAPI 3.0.
 
-La documentación interactiva está disponible directamente en:
+La documentación interactiva está disponible en:
 
-- `http://localhost:3000/docs`
+- Desarrollo: `http://localhost:3000/docs`
+- Producción: `https://proyectom2gerardo-acosta-production.up.railway.app/docs`
 
-Pasos rápidos:
+Para verla en local, habiendo iniciado el servidor, abrí la URL de "Desarrollo".
 
-1. Iniciá el servidor con `npm run dev` o `npm start`.
-2. Abrí `http://localhost:3000/docs`.
+Para verla en "Producción", abrí la URL pública de Railway.
 
 Opcionalmente, también podés abrir el archivo en [Swagger Editor](https://editor.swagger.io) pegando el contenido de `openapi.yaml`.
 
@@ -236,7 +242,9 @@ DATABASE_URL=postgresql://usuario:contraseña@host:puerto/miniblog
 PORT=3000
 ```
 
-Usá la **Internal URL** (o la referencia de variable) que Railway genera para PostgreSQL como valor de `DATABASE_URL`.
+En este proyecto, la app consume `process.env.DATABASE_URL`, así que ese valor debe apuntar al servicio de Postgres de Railway.
+
+Si Railway te ofrece ambas opciones, preferí `Postgres.DATABASE_URL` (conexión interna). Usá `Postgres.DATABASE_PUBLIC_URL` solo si necesitás conexión pública por un motivo específico.
 
 ### 6. Ejecutar los scripts SQL
 
@@ -253,6 +261,8 @@ Probá la URL pública de Railway y verificá que estos endpoints respondan:
 - `/authors`
 - `/posts`
 - `/docs`
+
+La documentación Swagger queda disponible en `https://<tu-dominio-de-railway>/docs`.
 
 ---
 
