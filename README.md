@@ -11,6 +11,8 @@ API REST desarrollada en Node.js + Express conectada a PostgreSQL para gestionar
 - PostgreSQL
 - pg
 - dotenv
+- swagger-ui-express
+- yaml
 - Vitest + Supertest
 
 ---
@@ -20,6 +22,43 @@ API REST desarrollada en Node.js + Express conectada a PostgreSQL para gestionar
 - Node.js instalado
 - PostgreSQL instalado y corriendo
 - Git instalado
+
+---
+
+## Estructura del proyecto
+
+```text
+miniblog-api/
+├── .env.example
+├── index.js
+├── openapi.yaml
+├── package.json
+├── README.md
+├── vitest.config.js
+├── sql/
+│   ├── setup.sql
+│   └── seed.sql
+├── src/
+│   ├── app.js
+│   ├── db/
+│   │   └── pool.js
+│   ├── middlewares/
+│   │   ├── errorHandler.js
+│   │   └── errors.js
+│   ├── routes/
+│   │   ├── authors.routes.js
+│   │   └── posts.routes.js
+│   └── services/
+│       ├── authors.service.js
+│       └── posts.service.js
+└── tests/
+	├── integration/
+	│   ├── authors.test.js
+	│   └── posts.test.js
+	└── unit/
+		├── authors.service.test.js
+		└── posts.service.test.js
+```
 
 ---
 
@@ -47,8 +86,11 @@ cp .env.example .env
 ```
 
 El archivo `.env` debe tener este formato:
+
+```env
 PORT=3000
 DATABASE_URL=postgresql://postgres:TU_CONTRASEÑA@127.0.0.1:5432/miniblog
+```
 
 ### 4. Crear la base de datos y las tablas
 
@@ -85,11 +127,20 @@ npm test
 
 ---
 
-## Documentación OpenAPI
+## Documentación OpenAPI / Swagger
 
-El archivo `openapi.yaml` en la raíz del proyecto contiene la documentación completa de la API en formato OpenAPI 3.0.
+El archivo `openapi.yaml` en la raíz del proyecto contiene la especificación completa de la API en formato OpenAPI 3.0.
 
-Para visualizarla de forma interactiva podés usar [Swagger Editor](https://editor.swagger.io), pegando el contenido del archivo.
+La documentación interactiva está disponible directamente en:
+
+- `http://localhost:3000/docs`
+
+Pasos rápidos:
+
+1. Iniciá el servidor con `npm run dev` o `npm start`.
+2. Abrí `http://localhost:3000/docs`.
+
+Opcionalmente, también podés abrir el archivo en [Swagger Editor](https://editor.swagger.io) pegando el contenido de `openapi.yaml`.
 
 ---
 
@@ -118,42 +169,120 @@ Para visualizarla de forma interactiva podés usar [Swagger Editor](https://edit
 
 ---
 
-## Deploy en Railway
+## Validaciones y manejo de errores
 
-### 1. Crear cuenta en Railway
+La API aplica validaciones en rutas antes de ejecutar operaciones de base de datos, y centraliza el manejo de errores en middlewares.
 
-Registrate en [railway.app](https://railway.app) y creá un nuevo proyecto.
+### Validaciones en Authors
 
-### 2. Agregar servicio PostgreSQL
+- `id` debe ser un número entero positivo en rutas con parámetro (`/authors/:id`).
+- `name` y `email` son obligatorios en `POST /authors` y `PUT /authors/:id`.
+- `email` es único: si ya existe, la API responde conflicto.
 
-Dentro del proyecto en Railway, agregá un servicio de PostgreSQL. Railway te proveerá automáticamente las credenciales de conexión.
+### Validaciones en Posts
 
-### 3. Configurar variables de entorno
+- `id` y `authorId` deben ser números enteros positivos (`/posts/:id`, `/posts/author/:authorId`).
+- `title`, `content` y `author_id` son obligatorios en `POST /posts` y `PUT /posts/:id`.
+- `author_id` debe ser entero positivo.
+- Si `author_id` no existe en la tabla de autores (FK), la API responde error de entidad no procesable.
 
-En Railway, en la sección **Variables** de tu servicio, agregá:
-DATABASE_URL=postgresql://usuario:contraseña@host:puerto/miniblog
-PORT=3000
+### Códigos de estado usados
 
-Usá la **Internal URL** que Railway genera para la base de datos como valor de `DATABASE_URL`.
+- `200 OK`: consulta o actualización exitosa.
+- `201 Created`: recurso creado correctamente.
+- `204 No Content`: recurso eliminado correctamente.
+- `400 Bad Request`: datos faltantes o formato inválido (por ejemplo IDs inválidos).
+- `404 Not Found`: autor o post no encontrado.
+- `409 Conflict`: conflicto de unicidad (email de autor repetido).
+- `422 Unprocessable Entity`: referencia inválida de clave foránea (`author_id` inexistente).
+- `500 Internal Server Error`: error inesperado en el servidor.
 
-### 4. Conectar el repositorio
+### Formato de respuesta de error
 
-En Railway, seleccioná **Deploy from GitHub** y conectá tu repositorio. Railway detectará automáticamente el script `start` del `package.json` y desplegará la app.
+Los errores se normalizan en el middleware global y responden en formato JSON:
 
-### 5. Ejecutar el script SQL en Railway
-
-Desde la consola de Railway o usando un cliente PostgreSQL externo con la **Public URL**, ejecutá el contenido de `sql/setup.sql` para crear las tablas.
+```json
+{
+  "error": "Mensaje descriptivo del error"
+}
+```
 
 ---
 
-## Uso de IA en el proyecto
+## Deploy en Railway
 
-Este proyecto fue desarrollado con asistencia de Claude (Anthropic) como herramienta de apoyo. La IA fue utilizada para:
+### 1. Subir el proyecto a GitHub
 
-- Generar y revisar código de servicios, rutas y middlewares
-- Sugerir estructura de archivos y buenas prácticas
-- Escribir tests con Vitest y Supertest
-- Generar la documentación OpenAPI
-- Redactar este README
+Creá un repositorio en GitHub y subí tu proyecto para poder conectarlo desde Railway.
 
-Todos los prompts fueron revisados y el código generado fue comprendido y validado antes de ser incorporado al proyecto.
+### 2. Crear cuenta en Railway
+
+Registrate en [railway.app](https://railway.app) y creá un nuevo proyecto.
+
+### 3. Conectar el repositorio
+
+En Railway, seleccioná **Deploy from GitHub** y conectá tu repositorio. Railway usará el script `start` del `package.json` para levantar la API.
+
+### 4. Agregar servicio PostgreSQL
+
+Dentro del proyecto en Railway, agregá un servicio de PostgreSQL. Railway te proveerá automáticamente las credenciales de conexión.
+
+### 5. Configurar variables de entorno
+
+En Railway, en la sección **Variables** del servicio web (la API), configurá:
+
+```env
+DATABASE_URL=postgresql://usuario:contraseña@host:puerto/miniblog
+PORT=3000
+```
+
+Usá la **Internal URL** (o la referencia de variable) que Railway genera para PostgreSQL como valor de `DATABASE_URL`.
+
+### 6. Ejecutar los scripts SQL
+
+Desde la consola de PostgreSQL en Railway (o con un cliente externo), ejecutá:
+
+- `sql/setup.sql` para crear tablas e índice.
+- `sql/seed.sql` (opcional) para cargar datos de prueba.
+
+### 7. Verificar despliegue
+
+Probá la URL pública de Railway y verificá que estos endpoints respondan:
+
+- `/`
+- `/authors`
+- `/posts`
+- `/docs`
+
+---
+
+## Registro de uso de IA
+
+Durante el desarrollo de este proyecto utilicé Claude (Anthropic) como asistente.
+
+### Partes con asistencia de IA
+
+| Área                     | Descripción del uso                                                                                                                 |
+| ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------- |
+| Estructura del proyecto  | Se consultó la organización de carpetas y archivos para mantener la separación de responsabilidades (routes, services, middlewares) |
+| Configuración de pg.Pool | Se consultó el setup con soporte para `DATABASE_URL` y variables de entorno separadas                                               |
+| Middleware de errores    | Se solicitó un ejemplo de middleware centralizado para normalizar respuestas de error con códigos HTTP semánticos                   |
+| Queries SQL              | Se revisó la sintaxis de queries parametrizadas con `$1`, `$2` en node-postgres para prevenir SQL injection                         |
+| Tests con Vitest         | Se consultó cómo organizar tests unitarios e integración y resolver mocking con módulos CommonJS                                    |
+| OpenAPI                  | Se generó la estructura base del archivo `openapi.yaml` con endpoints y esquemas                                                    |
+| Swagger UI               | Se consultó cómo integrar swagger-ui-express para servir documentación interactiva en `/docs`                                       |
+| README                   | Se generó la documentación inicial del proyecto                                                                                     |
+
+### Partes desarrolladas de forma autónoma
+
+- Comprensión y revisión de cada archivo antes de implementarlo
+- Decisiones de estructura y nombres de archivos
+- Resolución de errores con mocking en tests (ESM vs CommonJS)
+- Configuración del entorno local (PostgreSQL, variables de entorno)
+- Adaptación de queries y servicios a la lógica de negocio específica
+- Diseño de validaciones en rutas según reglas de negocio
+- Prueba manual de endpoints antes de integrar cambios
+
+### Nota de validación
+
+La IA fue utilizada como guía y punto de partida. Cada parte del código fue comprendido, revisado y probado manualmente antes de ser integrado al proyecto. Se realizaron ajustes para garantizar que cumpliera con los requisitos planteados.
