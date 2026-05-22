@@ -1,0 +1,111 @@
+
+> miniblog-api@1.0.0 test
+> vitest run
+
+
+[1m[30m[46m RUN [49m[39m[22m [36mv4.1.6 [39m[90mC:/Users/Usuario/Documents/Programación/SoyHenry/ProyectoM2_Gerardo-Acosta/miniblog-api[39m
+
+[90mstdout[2m | tests/unit/posts.service.test.js
+[22m[39m◇ injected env (2) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+
+[90mstdout[2m | tests/unit/comments.service.test.js
+[22m[39m◇ injected env (2) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+
+[90mstdout[2m | tests/unit/authors.service.test.js
+[22m[39m◇ injected env (2) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+
+ [32m✓[39m tests/unit/posts.service.test.js [2m([22m[2m10 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m tests/unit/authors.service.test.js [2m([22m[2m8 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m tests/unit/comments.service.test.js [2m([22m[2m9 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+[90mstdout[2m | tests/integration/posts.test.js
+[22m[39m◇ injected env (2) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+
+[90mstdout[2m | tests/integration/authors.test.js
+[22m[39m◇ injected env (2) from .env // tip: ⌘ suppress logs { quiet: true }
+
+[90mstdout[2m | tests/integration/comments.test.js
+[22m[39m◇ injected env (2) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+
+[90mstderr[2m | tests/integration/authors.test.js[2m > [22m[2mAuthors[2m > [22m[2mPOST /authors - falla si falta name o email
+[22m[39mError: name y email son obligatorios
+    at createError (C:\Users\Usuario\Documents\Programación\SoyHenry\ProyectoM2_Gerardo-Acosta\miniblog-api\src\middlewares\errors.js:2:17)
+    at badRequest (C:\Users\Usuario\Documents\Programación\SoyHenry\ProyectoM2_Gerardo-Acosta\miniblog-api\src\middlewares\errors.js:8:10)
+    at C:\Users\Usuario\Documents\Programación\SoyHenry\ProyectoM2_Gerardo-Acosta\miniblog-api\src\routes\authors.routes.js:42:19
+    at Layer.handleRequest (C:\Users\Usuario\Documents\Programación\SoyHenry\ProyectoM2_Gerardo-Acosta\miniblog-api\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\Usuario\Documents\Programación\SoyHenry\ProyectoM2_Gerardo-Acosta\miniblog-api\node_modules\router\lib\route.js:157:13)
+    at Route.dispatch (C:\Users\Usuario\Documents\Programación\SoyHenry\ProyectoM2_Gerardo-Acosta\miniblog-api\node_modules\router\lib\route.js:117:3)
+    at handle (C:\Users\Usuario\Documents\Programación\SoyHenry\ProyectoM2_Gerardo-Acosta\miniblog-api\node_modules\router\index.js:435:11)
+    at Layer.handleRequest (C:\Users\Usuario\Documents\Programación\SoyHenry\ProyectoM2_Gerardo-Acosta\miniblog-api\node_modules\router\lib\layer.js:152:17)
+    at C:\Users\Usuario\Documents\Programación\SoyHenry\ProyectoM2_Gerardo-Acosta\miniblog-api\node_modules\router\index.js:295:15
+    at processParams (C:\Users\Usuario\Documents\Programación\SoyHenry\ProyectoM2_Gerardo-Acosta\miniblog-api\node_modules\router\index.js:582:12)
+
+[90mstderr[2m | tests/integration/authors.test.js[2m > [22m[2mAuthors[2m > [22m[2mGET /authors/:id - devuelve 404 si no existe
+[22m[39mError: Autor no encontrado
+    at createError (C:\Users\Usuario\Documents\Programación\SoyHenry\ProyectoM2_Gerardo-Acosta\miniblog-api\src\middlewares\errors.js:2:17)
+    at notFound (C:\Users\Usuario\Documents\Programación\SoyHenry\ProyectoM2_Gerardo-Acosta\miniblog-api\src\middlewares\errors.js:20:10)
+    at C:\Users\Usuario\Documents\Programación\SoyHenry\ProyectoM2_Gerardo-Acosta\miniblog-api\src\routes\authors.routes.js:31:30
+    at processTicksAndRejections (node:internal/process/task_queues:104:5)
+
+[90mstderr[2m | tests/integration/comments.test.js[2m > [22m[2mComments[2m > [22m[2mPOST /comments - falla si faltan campos obligatorios
+[22m[39mError: post_id y content son obligatorios
+    at createError (C:\Users\Usuario\Documents\Programación\SoyHenry\ProyectoM2_Gerardo-Acosta\miniblog-api\src\middlewares\errors.js:2:17)
+    at badRequest (C:\Users\Usuario\Documents\Programación\SoyHenry\ProyectoM2_Gerardo-Acosta\miniblog-api\src\middlewares\errors.js:8:10)
+    at C:\Users\Usuario\Documents\Programación\SoyHenry\ProyectoM2_Gerardo-Acosta\miniblog-api\src\routes\comments.routes.js:58:19
+    at Layer.handleRequest (C:\Users\Usuario\Documents\Programación\SoyHenry\ProyectoM2_Gerardo-Acosta\miniblog-api\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\Usuario\Documents\Programación\SoyHenry\ProyectoM2_Gerardo-Acosta\miniblog-api\node_modules\router\lib\route.js:157:13)
+    at Route.dispatch (C:\Users\Usuario\Documents\Programación\SoyHenry\ProyectoM2_Gerardo-Acosta\miniblog-api\node_modules\router\lib\route.js:117:3)
+    at handle (C:\Users\Usuario\Documents\Programación\SoyHenry\ProyectoM2_Gerardo-Acosta\miniblog-api\node_modules\router\index.js:435:11)
+    at Layer.handleRequest (C:\Users\Usuario\Documents\Programación\SoyHenry\ProyectoM2_Gerardo-Acosta\miniblog-api\node_modules\router\lib\layer.js:152:17)
+    at C:\Users\Usuario\Documents\Programación\SoyHenry\ProyectoM2_Gerardo-Acosta\miniblog-api\node_modules\router\index.js:295:15
+    at processParams (C:\Users\Usuario\Documents\Programación\SoyHenry\ProyectoM2_Gerardo-Acosta\miniblog-api\node_modules\router\index.js:582:12)
+
+[90mstderr[2m | tests/integration/authors.test.js[2m > [22m[2mAuthors[2m > [22m[2mDELETE /authors/:id - devuelve 404 si no existe
+[22m[39mError: Autor no encontrado
+    at createError (C:\Users\Usuario\Documents\Programación\SoyHenry\ProyectoM2_Gerardo-Acosta\miniblog-api\src\middlewares\errors.js:2:17)
+    at notFound (C:\Users\Usuario\Documents\Programación\SoyHenry\ProyectoM2_Gerardo-Acosta\miniblog-api\src\middlewares\errors.js:20:10)
+    at C:\Users\Usuario\Documents\Programación\SoyHenry\ProyectoM2_Gerardo-Acosta\miniblog-api\src\routes\authors.routes.js:74:30
+    at processTicksAndRejections (node:internal/process/task_queues:104:5)
+
+ [32m✓[39m tests/integration/authors.test.js [2m([22m[2m8 tests[22m[2m)[22m[32m 94[2mms[22m[39m
+[90mstderr[2m | tests/integration/comments.test.js[2m > [22m[2mComments[2m > [22m[2mDELETE /comments/:id - devuelve 404 si no existe
+[22m[39mError: Comentario no encontrado
+    at createError (C:\Users\Usuario\Documents\Programación\SoyHenry\ProyectoM2_Gerardo-Acosta\miniblog-api\src\middlewares\errors.js:2:17)
+    at notFound (C:\Users\Usuario\Documents\Programación\SoyHenry\ProyectoM2_Gerardo-Acosta\miniblog-api\src\middlewares\errors.js:20:10)
+    at C:\Users\Usuario\Documents\Programación\SoyHenry\ProyectoM2_Gerardo-Acosta\miniblog-api\src\routes\comments.routes.js:94:31
+    at processTicksAndRejections (node:internal/process/task_queues:104:5)
+
+ [32m✓[39m tests/integration/comments.test.js [2m([22m[2m10 tests[22m[2m)[22m[32m 105[2mms[22m[39m
+[90mstderr[2m | tests/integration/posts.test.js[2m > [22m[2mPosts[2m > [22m[2mPOST /posts - falla si faltan campos obligatorios
+[22m[39mError: title, content y author_id son obligatorios
+    at createError (C:\Users\Usuario\Documents\Programación\SoyHenry\ProyectoM2_Gerardo-Acosta\miniblog-api\src\middlewares\errors.js:2:17)
+    at badRequest (C:\Users\Usuario\Documents\Programación\SoyHenry\ProyectoM2_Gerardo-Acosta\miniblog-api\src\middlewares\errors.js:8:10)
+    at C:\Users\Usuario\Documents\Programación\SoyHenry\ProyectoM2_Gerardo-Acosta\miniblog-api\src\routes\posts.routes.js:58:19
+    at Layer.handleRequest (C:\Users\Usuario\Documents\Programación\SoyHenry\ProyectoM2_Gerardo-Acosta\miniblog-api\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\Usuario\Documents\Programación\SoyHenry\ProyectoM2_Gerardo-Acosta\miniblog-api\node_modules\router\lib\route.js:157:13)
+    at Route.dispatch (C:\Users\Usuario\Documents\Programación\SoyHenry\ProyectoM2_Gerardo-Acosta\miniblog-api\node_modules\router\lib\route.js:117:3)
+    at handle (C:\Users\Usuario\Documents\Programación\SoyHenry\ProyectoM2_Gerardo-Acosta\miniblog-api\node_modules\router\index.js:435:11)
+    at Layer.handleRequest (C:\Users\Usuario\Documents\Programación\SoyHenry\ProyectoM2_Gerardo-Acosta\miniblog-api\node_modules\router\lib\layer.js:152:17)
+    at C:\Users\Usuario\Documents\Programación\SoyHenry\ProyectoM2_Gerardo-Acosta\miniblog-api\node_modules\router\index.js:295:15
+    at processParams (C:\Users\Usuario\Documents\Programación\SoyHenry\ProyectoM2_Gerardo-Acosta\miniblog-api\node_modules\router\index.js:582:12)
+
+[90mstderr[2m | tests/integration/posts.test.js[2m > [22m[2mPosts[2m > [22m[2mGET /posts/:id - devuelve 404 si no existe
+[22m[39mError: Post no encontrado
+    at createError (C:\Users\Usuario\Documents\Programación\SoyHenry\ProyectoM2_Gerardo-Acosta\miniblog-api\src\middlewares\errors.js:2:17)
+    at notFound (C:\Users\Usuario\Documents\Programación\SoyHenry\ProyectoM2_Gerardo-Acosta\miniblog-api\src\middlewares\errors.js:20:10)
+    at C:\Users\Usuario\Documents\Programación\SoyHenry\ProyectoM2_Gerardo-Acosta\miniblog-api\src\routes\posts.routes.js:47:28
+    at processTicksAndRejections (node:internal/process/task_queues:104:5)
+
+[90mstderr[2m | tests/integration/posts.test.js[2m > [22m[2mPosts[2m > [22m[2mDELETE /posts/:id - devuelve 404 si no existe
+[22m[39mError: Post no encontrado
+    at createError (C:\Users\Usuario\Documents\Programación\SoyHenry\ProyectoM2_Gerardo-Acosta\miniblog-api\src\middlewares\errors.js:2:17)
+    at notFound (C:\Users\Usuario\Documents\Programación\SoyHenry\ProyectoM2_Gerardo-Acosta\miniblog-api\src\middlewares\errors.js:20:10)
+    at C:\Users\Usuario\Documents\Programación\SoyHenry\ProyectoM2_Gerardo-Acosta\miniblog-api\src\routes\posts.routes.js:99:28
+    at processTicksAndRejections (node:internal/process/task_queues:104:5)
+
+ [32m✓[39m tests/integration/posts.test.js [2m([22m[2m10 tests[22m[2m)[22m[32m 207[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m6 passed[39m[22m[90m (6)[39m
+[2m      Tests [22m [1m[32m55 passed[39m[22m[90m (55)[39m
+[2m   Start at [22m 15:29:00
+[2m   Duration [22m 738ms[2m (transform 98ms, setup 0ms, import 1.23s, tests 436ms, environment 1ms)[22m
+
