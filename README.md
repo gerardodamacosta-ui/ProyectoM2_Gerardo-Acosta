@@ -1,6 +1,6 @@
 # MiniBlog API
 
-API REST desarrollada en Node.js + Express conectada a PostgreSQL para gestionar autores y posts.
+API REST desarrollada en Node.js + Express conectada a PostgreSQL para gestionar autores, posts y comentarios.
 
 ---
 
@@ -48,16 +48,20 @@ miniblog-api/
 │   │   └── errors.js
 │   ├── routes/
 │   │   ├── authors.routes.js
+│   │   ├── comments.routes.js
 │   │   └── posts.routes.js
 │   └── services/
 │       ├── authors.service.js
+│       ├── comments.service.js
 │       └── posts.service.js
 └── tests/
 	├── integration/
 	│   ├── authors.test.js
+	│   ├── comments.test.js
 	│   └── posts.test.js
 	└── unit/
 		├── authors.service.test.js
+		├── comments.service.test.js
 		└── posts.service.test.js
 ```
 
@@ -174,6 +178,17 @@ Opcionalmente, también podés abrir el archivo en [Swagger Editor](https://edit
 | PUT    | `/posts/:id`              | Actualizar post                  |
 | DELETE | `/posts/:id`              | Eliminar post                    |
 
+### Comments
+
+| Método | Ruta                     | Descripción                           |
+| ------ | ------------------------ | ------------------------------------- |
+| GET    | `/comments`              | Listar todos los comentarios          |
+| GET    | `/comments/:id`          | Detalle de un comentario              |
+| GET    | `/comments/post/:postId` | Comentarios de un post con su detalle |
+| POST   | `/comments`              | Crear comentario                      |
+| PUT    | `/comments/:id`          | Actualizar comentario                 |
+| DELETE | `/comments/:id`          | Eliminar comentario                   |
+
 ---
 
 ## Validaciones y manejo de errores
@@ -193,15 +208,22 @@ La API aplica validaciones en rutas antes de ejecutar operaciones de base de dat
 - `author_id` debe ser entero positivo.
 - Si `author_id` no existe en la tabla de autores (FK), la API responde error de entidad no procesable.
 
+### Validaciones en Comments
+
+- `id` y `postId` deben ser números enteros positivos (`/comments/:id`, `/comments/post/:postId`).
+- `post_id` y `content` son obligatorios en `POST /comments` y `PUT /comments/:id`.
+- `post_id` debe ser entero positivo.
+- Si `post_id` no existe en la tabla de posts (FK), la API responde error de entidad no procesable.
+
 ### Códigos de estado usados
 
 - `200 OK`: consulta o actualización exitosa.
 - `201 Created`: recurso creado correctamente.
 - `204 No Content`: recurso eliminado correctamente.
 - `400 Bad Request`: datos faltantes o formato inválido (por ejemplo IDs inválidos).
-- `404 Not Found`: autor o post no encontrado.
+- `404 Not Found`: autor, post o comentario no encontrado.
 - `409 Conflict`: conflicto de unicidad (email de autor repetido).
-- `422 Unprocessable Entity`: referencia inválida de clave foránea (`author_id` inexistente).
+- `422 Unprocessable Entity`: referencia inválida de clave foránea (`author_id` o `post_id` inexistente).
 - `500 Internal Server Error`: error inesperado en el servidor.
 
 ### Formato de respuesta de error
