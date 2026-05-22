@@ -15,3 +15,14 @@ FROM (
 ) AS p(email, title, content, published)
 JOIN authors a ON a.email = p.email
 WHERE NOT EXISTS (SELECT 1 FROM posts);
+
+INSERT INTO comments (post_id, content)
+SELECT p.id, c.content
+FROM (
+	VALUES
+		('Mi aventura con Express', 'Excelente introduccion a Express.'),
+		('Mi aventura con Express', 'Me sirvio para ordenar mejor mis rutas.'),
+		('Consultas SQL desde cero', 'Muy claro el enfoque paso a paso.')
+) AS c(post_title, content)
+JOIN posts p ON p.title = c.post_title
+WHERE NOT EXISTS (SELECT 1 FROM comments);

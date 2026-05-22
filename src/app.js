@@ -12,6 +12,7 @@ const swaggerSpec = yaml.parse(openApiYaml);
 
 const authorsRouter = require("./routes/authors.routes");
 const postsRouter = require("./routes/posts.routes");
+const commentsRouter = require("./routes/comments.routes");
 const errorHandler = require("./middlewares/errorHandler");
 
 app.use(express.json());
@@ -25,6 +26,7 @@ app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use("/authors", authorsRouter);
 app.use("/posts", postsRouter);
+app.use("/comments", commentsRouter);
 
 app.use(errorHandler);
 
