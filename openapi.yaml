@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: MiniBlog API
-  description: API REST para gestionar autores y posts
+  description: API REST para gestionar autores, posts y comentarios
   version: 1.0.0
 
 servers:
@@ -206,6 +206,116 @@ paths:
         "404":
           description: No se encontraron posts para ese autor
 
+  /comments:
+    get:
+      summary: Listar todos los comentarios
+      responses:
+        "200":
+          description: Lista de comentarios
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Comment"
+    post:
+      summary: Crear un comentario
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CommentInput"
+      responses:
+        "201":
+          description: Comentario creado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Comment"
+        "400":
+          description: Datos inválidos
+        "422":
+          description: El post referenciado no existe
+
+  /comments/{id}:
+    get:
+      summary: Obtener un comentario por ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Comentario encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Comment"
+        "404":
+          description: Comentario no encontrado
+    put:
+      summary: Actualizar un comentario
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CommentInput"
+      responses:
+        "200":
+          description: Comentario actualizado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Comment"
+        "400":
+          description: Datos inválidos
+        "404":
+          description: Comentario no encontrado
+        "422":
+          description: El post referenciado no existe
+    delete:
+      summary: Eliminar un comentario
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Comentario eliminado
+        "404":
+          description: Comentario no encontrado
+
+  /comments/post/{postId}:
+    get:
+      summary: Obtener comentarios de un post con su detalle
+      parameters:
+        - in: path
+          name: postId
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Lista de comentarios del post
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CommentWithPost"
+
 components:
   schemas:
     Author:
@@ -290,4 +400,43 @@ components:
         author_email:
           type: string
         author_bio:
+          type: string
+
+    Comment:
+      type: object
+      properties:
+        id:
+          type: integer
+        post_id:
+          type: integer
+        content:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+
+    CommentInput:
+      type: object
+      required:
+        - post_id
+        - content
+      properties:
+        post_id:
+          type: integer
+        content:
+          type: string
+
+    CommentWithPost:
+      type: object
+      properties:
+        id:
+          type: integer
+        post_id:
+          type: integer
+        content:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        post_title:
           type: string
